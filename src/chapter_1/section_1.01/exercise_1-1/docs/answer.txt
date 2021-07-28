@@ -1,0 +1,18 @@
+- Statement:
+
+Exercise 1-1. Run the "hello, world" program on your system. Experiment 
+with leaving out parts of the program, to see what errors messages you get.
+
+- Answer
+
+* Running on Windows 10
+Compiled with Microsoft Visual C++ (MSVC) Versión 19.29.30038.1 for x86
+
+Try 1: No changes
+cl helloworld_1.c
+
+- Compiler message: NONE. Only info about compiler and linker version
+	and generated files
+- Generated files: obj and .exe with same name as .c file
+
+
