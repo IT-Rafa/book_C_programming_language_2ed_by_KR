@@ -8,7 +8,7 @@ All documentation, including text answers is made with Doxygen.
 all programs are proved on Windows 10 native, WSL2 (Ubuntu) on Windows 10 and Ubuntu.
 
 The tools used are:
-* Windows 10 Native: MSVS
+* Windows 10 Native: MSVC (MicroSoft Visual C++)
 * WSL2: gcc
 * Ubuntu: gcc 
 
