@@ -5,10 +5,11 @@ with leaving out parts of the program, to see what errors messages you get.
 
 - Answer
 
+Try 1: No changes
+
 * Running on Windows 10
 Compiled with Microsoft Visual C++ (MSVC) Versión 19.29.30038.1 for x86
 
-Try 1: No changes
 cl helloworld_1.c
 
 - Compiler message: NONE. Only info about compiler and linker version
@@ -16,3 +17,8 @@ cl helloworld_1.c
 - Generated files: obj and .exe with same name as .c file
 
 
+* Running on WSL2
+Compiled with gcc
+gcc -g helloworld.c -o ../bin/helloworld
+- Compiler message: return type defaults to ‘int’ [-Wimplicit-int]
+- Generated files: executable same name as .c file

@@ -29,12 +29,16 @@
 *.dylib
 
 # Executables
+
 *.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
+
+#Executables Linux
+**/bin/*
 
 # Debug files
 *.dSYM/
@@ -50,3 +54,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+.vscode/tasks .json.txt

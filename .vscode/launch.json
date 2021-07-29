@@ -15,6 +15,29 @@
 			"environment": [],
 			"console": "externalTerminal",
 			"preLaunchTask": "C/C++: cl.exe compilar archivo activo"
-		}
+		},
+		{
+			"name": "gcc build and debug active file",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${fileDirname}/../bin/${fileBasenameNoExtension}.out",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"setupCommands": [
+			  {
+				"description": "Enable pretty-printing for gdb",
+				"text": "-enable-pretty-printing",
+				"ignoreFailures": true
+			  }
+			],
+			"preLaunchTask": "gcc build active file",
+			"miDebuggerPath": "/usr/bin/gdb",
+			"miDebuggerArgs": "-q -ex quit; wait() { fg >/dev/null; }; /bin/gdb -q --interpreter=mi"
+
+		  }
 	]
 }
