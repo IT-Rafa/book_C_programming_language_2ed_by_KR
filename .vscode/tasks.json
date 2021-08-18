@@ -7,10 +7,58 @@
             "args": [
                 "/EHsc",
                 "/nologo",
-				"/Fo:",
+                "/Fo:",
                 "${fileDirname}\\..\\obj\\",
                 "/Fe:",
                 "${fileDirname}\\..\\bin\\${fileBasenameNoExtension}.exe",
+                "${file}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
+            "detail": "Tarea generada por el depurador."
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: cl.exe Construir Tests",
+            "command": "cl.exe",
+            "args": [
+                "/EHsc",
+                "/nologo",
+                "/Fo:",
+                "${workspaceFolder}\\test\\obj\\",
+                "/Fe:",
+                "${workspaceFolder}\\test\\bin\\AllTest.exe",
+                "${workspaceFolder}\\test\\src\\AllTests.c",
+                "${workspaceFolder}\\test\\src\\CuTest\\CuTest.c",
+                "${workspaceFolder}\\test\\src\\testUtil\\testUtil.c",
+                "${workspaceFolder}\\test\\src\\chapter_1\\section_1.02\\src\\Section_1.2_Test.c",
+                "${workspaceFolder}\\test\\src\\chapter_1\\section_1.03\\src\\Section_1.3_Test.c",
+                "${workspaceFolder}\\test\\src\\chapter_1\\section_1.05\\section_1.05.1\\src\\Section_1.05.1_Test.c"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build",
+            "detail": "Tarea generada por el depurador."
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: cl.exe compilar archivo activo ver(1)",
+            "command": "cl.exe",
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/nologo",
+                "/Fe:",
+                "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "${file}"
             ],
             "options": {

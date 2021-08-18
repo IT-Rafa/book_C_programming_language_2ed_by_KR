@@ -15,6 +15,18 @@
 			"environment": [],
 			"console": "externalTerminal",
 			"preLaunchTask": "C/C++: cl.exe compilar archivo activo"
+		},
+		{
+			"name": "cl.exe - Hacer tests",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}\\test\\bin\\AllTest.exe",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"console": "externalTerminal",
+			"preLaunchTask": "C/C++: cl.exe Construir Tests"
 		}
 	]
 }
