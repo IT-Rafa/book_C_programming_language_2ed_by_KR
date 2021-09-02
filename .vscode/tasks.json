@@ -2,7 +2,71 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: cl.exe compilar archivo activo",
+            "label": "Linux gcc: build active file",
+            "command": "/bin/gcc",
+            "args": [
+                "-g",
+                "${file}",
+                "-o",
+                "bin/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}/.."
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: /bin/gcc"
+        },
+        {
+            "type": "cppbuild",
+            "label": "Linux gcc: build allTest",
+            "command": "/bin/gcc",
+            "args": [
+                "-g",
+                "-std=c11",
+                "-Wall",
+                "-Wextra",
+                "-pedantic",
+                "-pthread",
+
+                "-iquote",
+                "${workspaceFolder}/test/CuTest",
+                "-iquote",
+                "${workspaceFolder}/test/testUtil",
+
+                "${workspaceFolder}/test/src/AllTests.c",
+                "${workspaceFolder}/test/CuTest/CuTest.c",
+                "${workspaceFolder}/test/testUtil/testUtil.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.02/src/Section_1.2_Test.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.03/src/Section_1.3_Test.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.05/section_1.05.1/src/Section_1.05.1_Test.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.05/section_1.05.3/src/Section_1.05.3_Test.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.05/section_1.05.4/src/Section_1.05.4_Test.c",
+                "${workspaceFolder}/test/book/chapter_1/section_1.06/src/Section_1.6_Test.c",
+
+                "-o",
+                "${workspaceFolder}/test/bin/AllTest",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "compiler: /bin/gcc"
+        },
+        {
+            "type": "cppbuild",
+            "label": "Windows MSVC: Build active file",
             "command": "cl.exe",
             "args": [
                 "/EHsc",
@@ -24,7 +88,7 @@
         },
         {
             "type": "cppbuild",
-            "label": "C/C++: cl.exe Construir Tests",
+            "label": "Windows MSVC: Build AllTest",
             "command": "cl.exe",
             "args": [
                 "/EHsc",
@@ -48,44 +112,7 @@
             ],
             "group": "build",
             "detail": "Tarea generada por el depurador."
-        },
-        {
-            "type": "cppbuild",
-            "label": "C/C++: cl.exe compilar archivo activo ver(1)",
-            "command": "cl.exe",
-            "args": [
-                "/Zi",
-                "/EHsc",
-                "/nologo",
-                "/Fe:",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
-                "${file}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "Tarea generada por el depurador."
-        },       {
-			"type": "shell",
-			"label": "gcc build active file",
-			"command": "/usr/bin/gcc",
-			"args": ["-g", "${file}", "-o", "${fileDirname}/../bin/${fileBasenameNoExtension}.out"],
-			"options": {
-			  "cwd": "/usr/bin"
-			},
-			"problemMatcher": ["$gcc"],
-			"group": {
-			  "kind": "build",
-			  "isDefault": true
-			}
-		  }
+        }
     ],
     "version": "2.0.0"
 }

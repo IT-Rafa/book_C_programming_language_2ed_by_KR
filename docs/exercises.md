@@ -40,11 +40,11 @@ List of all examples and exercises from book order by chapter and sections
         - @subpage Exercise_1-7
 #### Section 1.5.2: Character Counting
 - Examples
-        - @ref charCount_v1.c
-        - @ref charCount_v2.c
+        - @ref countChars_v1.c
+        - @ref countChars_v2.c
 #### Section 1.5.3: Line Counting
 - Examples
-        - @ref lines_count_v1.c
+        - @ref countLines_v1.c
 - Exercises
         - @subpage Exercise_1-8
         - @subpage Exercise_1-9

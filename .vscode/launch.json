@@ -5,7 +5,47 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "cl.exe - Compilar y ejecutar el archivo activo",
+			"name": "Linux gdb: Debug active file",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${fileDirname}/../bin/${fileBasenameNoExtension}",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"preLaunchTask": "Linux gcc: build active file",
+		},
+		{
+			"name": "Linux gdb: Debug AllTest",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/test/bin/AllTest",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"preLaunchTask": "Linux gcc: build allTest",
+		},
+		{
+			"name": "Windows MSVC: Debug active file",
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${fileDirname}\\..\\bin\\${fileBasenameNoExtension}.exe",
@@ -14,10 +54,10 @@
 			"cwd": "${fileDirname}",
 			"environment": [],
 			"console": "externalTerminal",
-			"preLaunchTask": "C/C++: cl.exe compilar archivo activo"
+			"preLaunchTask": "Windows MSVC: Build active file"
 		},
 		{
-			"name": "cl.exe - Hacer tests",
+			"name": "Windows MSVC: Debug AllTest",
 			"type": "cppvsdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}\\test\\bin\\AllTest.exe",
@@ -26,7 +66,7 @@
 			"cwd": "${workspaceFolder}",
 			"environment": [],
 			"console": "externalTerminal",
-			"preLaunchTask": "C/C++: cl.exe Construir Tests"
+			"preLaunchTask": "Windows MSVC: Build tests"
 		}
 	]
 }

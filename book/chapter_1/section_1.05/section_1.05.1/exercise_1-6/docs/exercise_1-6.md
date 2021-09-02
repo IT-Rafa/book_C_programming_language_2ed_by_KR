@@ -46,6 +46,7 @@ Source reference: @ref exercise_1-6.c
   - **Generated files:** Pending
 
 ### Test
-Test source: @ref Exercise_1_6_Test(CuTest *tc)
+Test source: @ref Exercise_1_6_Test1(CuTest *tc) for empty input
+Test source: @ref Exercise_1_6_Test2(CuTest *tc) for with-content input
 
 ### Conclusion
