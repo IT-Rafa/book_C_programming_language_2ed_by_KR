@@ -1,0 +1,4 @@
+int main(void){
+	char s1 [] = "hola";
+	char s2 [] = "hola;
+}

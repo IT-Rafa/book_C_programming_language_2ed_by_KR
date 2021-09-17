@@ -43,28 +43,27 @@ main()
     }
 
     // print result
-    printf("total chars: %d\n\n", nc);
-    for (int i = 0; i < CHARSETSIZE; ++i)
+    printf("total chars: %d\n", nc);
+    if (nc > 0)
     {
-
-        if (ascii[i] > 0)
+        putchar('\n');
+        for (int i = 0; i < CHARSETSIZE; ++i)
         {
-            putchar('\'');
-            if (i == '\n')
-                printf("\\n'");
-            else if (i == '\t')
-                printf("\\t'");
-            else
+            if (ascii[i] > 0)
             {
-                putchar(i);
                 putchar('\'');
-                putchar(' ');
-            }
+                if (i == '\n')
+                    printf("\\n'");
+                else if (i == '\t')
+                    printf("\\t'");
+                else
+                    printf("%c\' ", i);
 
-            printf(" (%3d)| ", i);
-            for (int j = 0; j < ascii[i]; ++j)
-                putchar('*');
-            putchar('\n');
+                printf(" (%3d)| ", i);
+                for (int j = 0; j < ascii[i]; ++j)
+                    putchar('*');
+                putchar('\n');
+            }
         }
     }
 }

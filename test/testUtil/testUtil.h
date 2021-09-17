@@ -1,3 +1,4 @@
+#include "CuTest.h"
 #if defined(_WIN32)
 #define SEPARATOR "\\"
 #include <windows.h>

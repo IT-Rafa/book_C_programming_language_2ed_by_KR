@@ -77,6 +77,15 @@ void Exercise_1_14_ver_Test1(CuTest *tc)
 
 	testOnlyMainExercise(tc, testName, exer);
 }
+
+void Exercise_1_14_ver_Test2(CuTest *tc)
+{
+	struct dataExercise exer = {"chapter_1", "section_1.06", "exercise_1-14_ver"};
+	char testName[] = "test2_";
+
+	testOnlyMainExercise(tc, testName, exer);
+}
+
 // ADD CUTEST FUNCTION
 CuSuite *Section_1_06()
 {
@@ -90,6 +99,7 @@ CuSuite *Section_1_06()
 	SUITE_ADD_TEST(suite, Exercise_1_14_hor_Test2);
 
 	SUITE_ADD_TEST(suite, Exercise_1_14_ver_Test1);
+	SUITE_ADD_TEST(suite, Exercise_1_14_ver_Test2);
 
 	return suite;
 }

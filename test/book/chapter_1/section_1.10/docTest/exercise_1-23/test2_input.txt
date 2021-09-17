@@ -1,0 +1,16 @@
+/* normal comment */
+/* "comment with quotes" */
+char st[] = "/* comment as string */";
+char st = '/*'; /* bad char, but well closed */
+int main()
+{
+    /* normal comment */
+    int b;             /* "ok comment with quotes" */
+    char st[] = "/* ok comment as string */";
+    char st2[] = "'";  /* string ok and closed */
+    char st2 = "\'";   /* string with sequence ok and closed */
+    char c = '/*';     /* bad char, but well closed */
+	char c2[] = \'"'"; /* bad C, but well closed */
+    char c2 = '"';     /* bad char, but well closed */
+    char c4 = ' ";     /* bad closed */
+}

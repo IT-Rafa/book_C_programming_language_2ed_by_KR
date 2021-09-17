@@ -27,22 +27,34 @@ int getline_book(char s[], int lim);
     s[i] = c;
  * @return int State of program value
  */
+int main(void)
+{
+    char s[LIMIT];
+    getline_book_v2(s, LIMIT);
+    printf("%s", s);
+    return 0;
+}
 
 int getline_book_v2(char s[], int lim)
 {
     int c, i;
-
-    for (i = 0; i < lim - 1; i++) {
-        if ((c = getchar()) != EOF) {
-            if (c != '\n') {
+    int end = 0;
+    for (i = 0; !end; i++) {
+        if (i < lim - 1) {
+            if ((c = getchar()) != EOF) {
                 s[i] = c;
+                if (c == '\n') {
+                    end = 1;
+                    s[i] = c;
+                }
+            }
+            else {
+                end = 1;
             }
         }
-    }
-
-    if (c == '\n') {
-        s[i] = c;
-        ++i;
+        else {
+            end = 1;
+        }
     }
 
     s[i] = '\0';

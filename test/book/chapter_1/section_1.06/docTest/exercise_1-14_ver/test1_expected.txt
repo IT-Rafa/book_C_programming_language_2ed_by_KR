@@ -1,1 +1,1 @@
-0: chars
+total chars: 0

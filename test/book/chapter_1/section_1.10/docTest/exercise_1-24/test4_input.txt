@@ -1,0 +1,11 @@
+int f0() { /* all ok */
+
+}
+
+int f1) { /* no open parentheses */
+
+}
+
+int f2( { /* no close parentheses */
+
+}

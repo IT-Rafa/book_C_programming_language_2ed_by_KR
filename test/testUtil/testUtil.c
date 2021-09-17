@@ -8,64 +8,58 @@
  */
 
 // LIBRARIES
-#include "CuTest.h"
 #include "testUtil.h"
 
 // Needed to use sprintf, fopen, fclose and FILE, NULL definitions
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-/*
-	Need to use redirect that depends on system used.
-	Same with folder's separators. 
-*/
 
 int runExercise(CuTest *tc, char *inputPath, char *outputPath, struct dataExercise exer)
 {
-	int compileResult = compileExercise(exer);
-	if (compileResult == 1)
-	{
-		char binPath[PATHMAX];
-		getBinPath(binPath, exer);
+    char message[OUTPUTMAX];
+    int compileResult = compileExercise(exer);
 
-		if (fileExists(binPath, "r"))
-		{
-			// use input if exists
-			if (inputPath == NULL || fileExists(inputPath, "r"))
-			{
-				char command[COMMANDMAX];
-				if (inputPath == NULL)
-				{
-					sprintf(command, "%s > %s", binPath, outputPath);
-				}
-				else
-				{
-					sprintf(command, "%s < %s > %s", binPath, inputPath, outputPath);
-				}
+    if (compileResult == 1) {
+        char binPath[PATHMAX];
+        getBinPath(binPath, exer);
 
-				return (system(command) == 0);
-			}
-			else
-			{
-				CuAssert(tc, "input file to test exercise not found\n", 0);
-			}
-		}
-		else
-		{
-			CuAssert(tc, "executable file of exercise not found\n", 0);
-		}
-	}
-	else if (compileResult == -1)
-	{
-		// not source
-		CuAssert(tc, "source file of exercise not found\n", 0);
-	}
-	else
-	{
-		// other fail
-		CuAssert(tc, "Compilation failed\n", 0);
-	}
-	return 0;
+        if (fileExists(binPath, "r")) {
+            // use input if exists
+            if (inputPath == NULL || fileExists(inputPath, "r")) {
+                char command[COMMANDMAX];
+                if (inputPath == NULL) {
+                    sprintf(command, "%s > %s", binPath, outputPath);
+                }
+                else {
+                    sprintf(command, "%s < %s > %s", binPath, inputPath, outputPath);
+                }
+
+                return (system(command) == 0);
+            }
+            else {
+                sprintf(message, "\n\tFail: File with input to test exercise not found:\n\t%s", inputPath);
+                CuAssert(tc, message, 0);
+            }
+        }
+        else {
+            sprintf(message, "\n\tFail: Executable file of exercise not found:\n\t%s", binPath);
+            CuAssert(tc, message, 0);
+        }
+    }
+    else if (compileResult == -1) {
+        // not source
+        char srcPath[PATHMAX];
+        getSourcePath(srcPath, exer);
+        sprintf(message, "\n\tFail: Source file of exercise not found:\n\t%s", srcPath);
+        CuAssert(tc, message, 0);
+    }
+    else {
+        // other fail
+        sprintf(message, "\n\tFail: Source file can´t be compiled:\n\t");
+        CuAssert(tc, message, 0);
+    }
+    return 0;
 }
 
 /**
@@ -80,61 +74,58 @@ int runExercise(CuTest *tc, char *inputPath, char *outputPath, struct dataExerci
  */
 void testOnlyMainExercise(CuTest *tc, char *testName, struct dataExercise exer)
 {
-	char testPath[PATHMAX];
-	char inputPath[FULLPATHMAX];
-	char expectedPath[FULLPATHMAX];
-	char outputPath[FULLPATHMAX];
+    char testPath[PATHMAX];
+    char inputPath[FULLPATHMAX];
+    char expectedPath[FULLPATHMAX];
+    char outputPath[FULLPATHMAX];
 
-	char actual[OUTPUTMAX];
-	char expected[OUTPUTMAX];
+    char actual[OUTPUTMAX];
+    char expected[OUTPUTMAX];
+    char message[OUTPUTMAX];
 
-	getTestFolder(testPath, exer);
+    getTestFolder(testPath, exer);
 
-	if (testName == NULL) // Test for no input programs
-	{
-		*inputPath = '\0';
-		sprintf(outputPath, "%s%s", testPath, "output.txt");
-		sprintf(expectedPath, "%s%s", testPath, "expected.txt");
+    if (testName == NULL) // Test for no input programs
+    {
+        *inputPath = '\0';
+        sprintf(outputPath, "%s%s", testPath, "output.txt");
+        sprintf(expectedPath, "%s%s", testPath, "expected.txt");
+        runExercise(tc, NULL, outputPath, exer);
+    }
+    else // Test for several input programs
+    {
+        sprintf(inputPath, "%s%s%s", testPath, testName, "input.txt");
+        sprintf(outputPath, "%s%s%s", testPath, testName, "output.txt");
+        sprintf(expectedPath, "%s%s%s", testPath, testName, "expected.txt");
+        runExercise(tc, inputPath, outputPath, exer);
+    }
 
-		runExercise(tc, NULL, outputPath, exer);
-	}
-	else // Test for several input programs
-	{
-		sprintf(inputPath, "%s%s%s", testPath, testName, "input.txt");
-		sprintf(outputPath, "%s%s%s", testPath, testName, "output.txt");
-		sprintf(expectedPath, "%s%s%s", testPath, testName, "expected.txt");
-		runExercise(tc, inputPath, outputPath, exer);
-	}
+    if (fileExists(outputPath, "r")) {
+        if (txtFileToSt(actual, outputPath)) {
+            if (fileExists(expectedPath, "r")) {
+                if (txtFileToSt(expected, expectedPath)) {
+                    CuAssertStrEquals(tc, expected, actual);
+                }
+                else {
 
-	if (fileExists(outputPath, "r"))
-	{
-		if (txtFileToSt(actual, outputPath))
-		{
-			if (fileExists(expectedPath, "r"))
-			{
-				if (txtFileToSt(expected, expectedPath))
-				{
-					CuAssertStrEquals(tc, expected, actual);
-				}
-				else
-				{
-					CuAssert(tc, "Exercise with expected content file cannot be read", 0);
-				}
-			}
-			else
-			{
-				CuAssert(tc, "Exercise with expected content file not found", 0);
-			}
-		}
-		else
-		{
-			CuAssert(tc, "exercise with actual content cannot be read", 0);
-		}
-	}
-	else
-	{
-		CuAssert(tc, "exercise with actual content file not found", 0);
-	}
+                    sprintf(message, "\n\tFail: Expected content file cannot be read:\n\t%s", expectedPath);
+                    CuAssert(tc, message, 0);
+                }
+            }
+            else {
+                sprintf(message, "\n\tFail: Expected content file not found:\n\t%s", expectedPath);
+                CuAssert(tc, message, 0);
+            }
+        }
+        else {
+            sprintf(message, "\n\tFail: Actual output file cannot be read:\n\t%s", expectedPath);
+            CuAssert(tc, message, 0);
+        }
+    }
+    else {
+        sprintf(message, "\n\tFail: Actual output file not found:\n\t%s", expectedPath);
+        CuAssert(tc, message, 0);
+    }
 }
 
 /**
@@ -147,22 +138,19 @@ void testOnlyMainExercise(CuTest *tc, char *testName, struct dataExercise exer)
  */
 int txtFileToSt(char *st, char *fileName)
 {
-	FILE *f;
-	int c;
-	f = fopen(fileName, "r");
-	if (f)
-	{
-		while ((c = getc(f)) != EOF)
-		{
-			*st++ = c;
-		}
-		*st = '\0';
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+    FILE *f;
+    int c;
+    f = fopen(fileName, "r");
+    if (f) {
+        while ((c = getc(f)) != EOF) {
+            *st++ = c;
+        }
+        *st = '\0';
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 /**
@@ -177,29 +165,27 @@ int txtFileToSt(char *st, char *fileName)
  */
 int compileExercise(struct dataExercise exer)
 {
-	char srcPath[PATHMAX];
-	char binFile[PATHMAX];
-	char command[COMMANDMAX];
+    char srcPath[PATHMAX];
+    char binFile[PATHMAX];
+    char command[COMMANDMAX];
 
-	getSourcePath(srcPath, exer);
-	if (fileExists(srcPath, "r"))
-	{
-		mkExerciseBinFolder(exer);
-		getBinPath(binFile, exer);
+    getSourcePath(srcPath, exer);
+
+    if (fileExists(srcPath, "r")) {
+        mkExerciseBinFolder(exer);
+        getBinPath(binFile, exer);
 
 #if defined(_WIN32)
-		sprintf(command, "%s %s %s %s", "cl", src, "-Fe", binFile);
+        sprintf(command, "%s %s %s %s", "cl", src, "-Fe", binFile);
 #else
-		sprintf(command, "%s %s %s %s  > /dev/null", "gcc -w", srcPath, "-o", binFile);
+        sprintf(command, "%s %s %s %s  > /dev/null", "gcc -w", srcPath, "-o", binFile);
 #endif
-		return system(command) == 0;
-	}
-	else
-	{ // file not found
-	printf("fail compile - source not found: %s\n", srcPath);
-		return -1;
-	}
-	return 0; // other fail
+        return system(command) == 0;
+    }
+    else { // file not found
+        return -1;
+    }
+    return 0; // other fail
 }
 
 /**
@@ -211,14 +197,14 @@ int compileExercise(struct dataExercise exer)
  */
 int getSourcePath(char *path, struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
-	return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
-				   "book",
-				   sep, exer.chapter,
-				   sep, exer.section,
-				   sep, exer.exercise,
-				   sep, "src",
-				   sep, exer.exercise, ".c");
+    char sep[] = SEPARATOR;
+    return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
+                   "book",
+                   sep, exer.chapter,
+                   sep, exer.section,
+                   sep, exer.exercise,
+                   sep, "src",
+                   sep, exer.exercise, ".c");
 }
 
 /**
@@ -230,15 +216,15 @@ int getSourcePath(char *path, struct dataExercise exer)
  */
 int getBinPath(char *path, struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
+    char sep[] = SEPARATOR;
 
-	return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
-				   "book",
-				   sep, exer.chapter,
-				   sep, exer.section,
-				   sep, exer.exercise,
-				   sep, "bin",
-				   sep, exer.exercise, ".exe");
+    return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
+                   "book",
+                   sep, exer.chapter,
+                   sep, exer.section,
+                   sep, exer.exercise,
+                   sep, "bin",
+                   sep, exer.exercise, ".exe");
 }
 /**
  * @brief Get the output path of a exercise execution and return if it exists. For test.
@@ -249,17 +235,17 @@ int getBinPath(char *path, struct dataExercise exer)
  */
 int getInputPath(char *inputPath, struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
-	mkExerciseTestFolder(exer);
+    char sep[] = SEPARATOR;
+    mkExerciseTestFolder(exer);
 
-	return sprintf(inputPath, "%s%s%s%s%s%s%s%s%s%s%s%s",
-				   "test", sep, "book",
-				   sep, exer.chapter,
-				   sep, exer.section,
-				   sep, "docTest",
-				   sep, exer.exercise,
-				   sep);
-	;
+    return sprintf(inputPath, "%s%s%s%s%s%s%s%s%s%s%s%s",
+                   "test", sep, "book",
+                   sep, exer.chapter,
+                   sep, exer.section,
+                   sep, "docTest",
+                   sep, exer.exercise,
+                   sep);
+    ;
 }
 /**
  * @brief Get the output path of a exercise execution and return if it exists. For test.
@@ -270,16 +256,16 @@ int getInputPath(char *inputPath, struct dataExercise exer)
  */
 int getOutputActualPath(char *path, struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
-	mkExerciseTestFolder(exer);
+    char sep[] = SEPARATOR;
+    mkExerciseTestFolder(exer);
 
-	return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
-				   "test", sep, "book",
-				   sep, exer.chapter,
-				   sep, exer.section,
-				   sep, "docTest",
-				   sep, exer.exercise,
-				   sep, "actual.txt");
+    return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
+                   "test", sep, "book",
+                   sep, exer.chapter,
+                   sep, exer.section,
+                   sep, "docTest",
+                   sep, exer.exercise,
+                   sep, "actual.txt");
 }
 /**
  * @brief Get the source path of file with the expected output of exercise execution and return if it exists.
@@ -290,15 +276,15 @@ int getOutputActualPath(char *path, struct dataExercise exer)
  */
 int getTestFolder(char *path, struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
+    char sep[] = SEPARATOR;
 
-	return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
-				   "test", sep, "book",
-				   sep, exer.chapter,
-				   sep, exer.section,
-				   sep, "docTest",
-				   sep, exer.exercise,
-				   sep);
+    return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s",
+                   "test", sep, "book",
+                   sep, exer.chapter,
+                   sep, exer.section,
+                   sep, "docTest",
+                   sep, exer.exercise,
+                   sep);
 }
 
 /**
@@ -309,15 +295,15 @@ int getTestFolder(char *path, struct dataExercise exer)
  */
 int mkExerciseTestFolder(struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
-	char path[PATHMAX];
-	sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s",
-			"test", sep, "book",
-			sep, exer.chapter,
-			sep, exer.section,
-			sep, "docTest",
-			sep, exer.exercise);
-	return createFolder(path);
+    char sep[] = SEPARATOR;
+    char path[PATHMAX];
+    sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s",
+            "test", sep, "book",
+            sep, exer.chapter,
+            sep, exer.section,
+            sep, "docTest",
+            sep, exer.exercise);
+    return createFolder(path);
 }
 
 /**
@@ -328,15 +314,15 @@ int mkExerciseTestFolder(struct dataExercise exer)
  */
 int mkExerciseBinFolder(struct dataExercise exer)
 {
-	char sep[] = SEPARATOR;
-	char path[PATHMAX];
-	sprintf(path, "%s%s%s%s%s%s%s%s%s",
-			"book",
-			sep, exer.chapter,
-			sep, exer.section,
-			sep, exer.exercise,
-			sep, "bin");
-	return createFolder(path);
+    char sep[] = SEPARATOR;
+    char path[PATHMAX];
+    sprintf(path, "%s%s%s%s%s%s%s%s%s",
+            "book",
+            sep, exer.chapter,
+            sep, exer.section,
+            sep, exer.exercise,
+            sep, "bin");
+    return createFolder(path);
 }
 
 /**
@@ -349,12 +335,12 @@ int mkExerciseBinFolder(struct dataExercise exer)
 int createFolder(char *path)
 {
 #if defined(_WIN32)
-	CreateDirectory(path, NULL);
+    CreateDirectory(path, NULL);
 
 #else
-	mkdir(path, 0700);
+    mkdir(path, 0700);
 #endif
-	return 1;
+    return 1;
 }
 
 /**
@@ -366,11 +352,10 @@ int createFolder(char *path)
  */
 int fileExists(char *path, char *permission)
 {
-	FILE *f;
-	if ((f = fopen(path, permission)))
-	{
-		fclose(f);
-		return 1;
-	}
-	return 0;
+    FILE *f;
+    if ((f = fopen(path, permission))) {
+        fclose(f);
+        return 1;
+    }
+    return 0;
 }

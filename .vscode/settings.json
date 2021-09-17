@@ -1,7 +1,5 @@
 {
     "files.associations": {
-        "stdio.h": "c",
-        "testutil.h": "c",
-        "random": "c"
+        "limits": "c"
     }
 }
