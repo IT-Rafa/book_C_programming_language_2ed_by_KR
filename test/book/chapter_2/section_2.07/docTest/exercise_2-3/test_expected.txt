@@ -6,6 +6,7 @@ hexadecimal number: 0xF is the integer: 15
 hexadecimal number: 0XF is the integer: 15
 hexadecimal number: 0xF5 is the integer: 245
 hexadecimal number: 1acb2fF is the integer: 28095231
-hexadecimal number: j cannot be converted
+hexadecimal number: j is the integer: 0
+hexadecimal number: 100000001 is the integer: 0
 hexadecimal number: ffffffff is the integer: 4294967295
-hexadecimal number: ffffffff0 cannot be converted
+hexadecimal number: 100000000 is the integer: 0

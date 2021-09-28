@@ -19,7 +19,8 @@
 /* FUNCTIONS DECLARATIONS */
 unsigned int htoi(char s[]);
 int hexaCharToInt(char c);
-int getInitNoEmptyPosition(char s[]);
+int htoi22(char s[]);
+int getInitBlankPosition(char s[]);
 
 /* FUNCTIONS DEFINITIONS */
 
@@ -34,10 +35,9 @@ int getInitNoEmptyPosition(char s[]);
 int main(void)
 {
     // Test htoi(s)
-
     unsigned int value;
 
-    // list of test but max
+    // list of test
     char stList[10][15] = {
         "  f",
         "  F",
@@ -47,11 +47,11 @@ int main(void)
         "0XF",
         "0xF5",
         "1acb2fF",
-        "j"
-        };
+        "j",
+        "100000001"};
 
     // convert list
-    for (int i = 0; i < 9; ++i) {
+    for (int i = 0; i < 10; ++i) {
         printf("hexadecimal number: %s is the integer: %u\n",
                stList[i], htoi(stList[i]));
     }
@@ -75,6 +75,7 @@ int main(void)
 
     return 0;
 }
+
 /**
  * @brief Converts a string of hexadecimal digits into its equivalent integer value
  * Converts a string of hexadecimal digits into its equivalent integer value
@@ -90,8 +91,7 @@ unsigned int htoi(char s[])
     unsigned int result = 0;
     int init, end, ptwo;
 
-    init = getInitNoEmptyPosition(s);
-    end = strlen(s) - 1;
+    init = getInitBlankPosition(s);
 
     // ignore prefix 0x 0X
     if (s[init] == '0' && (s[init + 1] == 'x' || s[init + 1] == 'X'))
@@ -101,13 +101,14 @@ unsigned int htoi(char s[])
     for (end = strlen(s) - 1, ptwo = 0;
          end >= init;
          --end, ++ptwo) {
-        int n;
-        if ((n = hexaCharToInt(s[end])) == -1)
+        int hd;
+        if ((hd = hexaCharToInt(s[end])) == -1)
             return 0;
-        if ((result + (n * pow(16, ptwo))) > UINT_MAX) {
+
+        if ((result + (hd * pow(16, ptwo))) > UINT_MAX) {
             return 0;
         }
-        result = result + (n * pow(16, ptwo));
+        result = result + (hd * pow(16, ptwo));
     }
     return result;
 }
@@ -129,7 +130,7 @@ int hexaCharToInt(char c)
         return -1;
 }
 
-int getInitNoEmptyPosition(char s[])
+int getInitBlankPosition(char s[])
 {
     int init = 0;
     if (s[0] == ' ' || s[0] == '\t') {

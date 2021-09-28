@@ -1,0 +1,5 @@
+del chars in string: "number, "
+from string: "number1, number2"
+14 chars deleted
+Result:
+"12"
