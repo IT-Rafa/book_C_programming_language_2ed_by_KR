@@ -1,0 +1,11 @@
+hexadecimal number:   f is the integer: 15
+hexadecimal number:   F is the integer: 15
+hexadecimal number: 0xf is the integer: 15
+hexadecimal number: 0Xf is the integer: 15
+hexadecimal number: 0xF is the integer: 15
+hexadecimal number: 0XF is the integer: 15
+hexadecimal number: 0xF5 is the integer: 245
+hexadecimal number: 1acb2fF is the integer: 28095231
+hexadecimal number: j cannot be converted
+hexadecimal number: ffffffff is the integer: 4294967295
+hexadecimal number: ffffffff0 cannot be converted

@@ -1,0 +1,2 @@
+------------- ERRORS FOUND -------------
+Error: brace closed before open in line 1; column: 5

@@ -12,22 +12,34 @@
 #include <stdio.h>
 
 /* SYMBOLIC CONSTANTS */
-#define FALSE 0   /* outside comment */
-#define OPENING 1 /* read '/', comment up on next char */
-#define CLOSING 2 /* read '/', comment up on next char */
-#define TRUE 3    /* inside comment */
+#define TABSIZE 4
+
+#define OPENING 0
+#define OPEN 1
+#define CLOSING 2
+#define CLOSED 3
 
 /* FUNCTIONS DECLARATIONS */
-char controlComments(c);
-void controlQuotes(c);
-void controlEscapeSequences(c);
-void printPendingAfterEOF(void);
+int commentControl(int c);
+int quotesControl(int c);
+int codeControl(int c);
+void controlPosition(int c);
+void showFinalErrors(void);
 
 /* EXTERNAL VARIABLES */
-int commState = FALSE;
-int quoteState = FALSE;
-int escSeqState = FALSE;
-int quoteType = '\0';
+int quote = CLOSED;
+int actquote = '\0';
+
+int escseq = CLOSED;
+int comment = CLOSED;
+char errorHeader[] = "-------------"
+                     " ERRORS FOUND "
+                     "-------------\n";
+int parenth = 0;
+int bracket = 0;
+int brace = 0;
+int line = 1;
+int column = 0;
 
 /*  FUNCTIONS DEFINITIONS */
 
@@ -39,176 +51,196 @@ int quoteType = '\0';
  * (This program is hard if you do it full generally.)
  * 
  * @return implicit int - state of program value
+ @todo in 1º line, the column is bad numbered
  */
 main()
 {
     int c; /* actual char */
 
-    int parent = 0; /* () */
-    int brace = 0;  /* {} */
-    int square = 0; /* [] */
-    int angled = 0; /* <> */
-
-    // check only in C text
     while ((c = getchar()) != EOF) {
-        if (controlComments(c) &&
-            quoteState == FALSE && escSeqState == FALSE) {
+        controlPosition(c);
 
-            if (c == '(')
-                ++parent;
-            else if (c == ')')
-                --parent;
-            else if (c == '{')
-                ++brace;
-            else if (c == '}')
-                --brace;
-            else if (c == '[')
-                ++square;
-            else if (c == ']')
-                --square;
-            else if (c == '<')
-                ++angled;
-            else if (c == '>')
-                --angled;
+        if (comment != CLOSED) {
+            // inside comment
+            if (!commentControl(c)) {
+                return 0;
+            }
+        }
+        else {
+            // C code
+            if (quote == OPEN) {
+                // inside quotes
+                if (!quotesControl(c)) {
+                    return 0;
+                }
+            }
+            else {
+                // outside quotes - normal C
+                if (!codeControl(c)) {
+                    return 0;
+                }
+            }
         }
     }
+    showFinalErrors();
+    return 0;
+}
+void showFinalErrors(void)
+{
 
-    if (commState == TRUE || commState == CLOSING) {
-        printf("comment no closed\n");
+    if (parenth || bracket || brace) {
+        printf("%s", errorHeader);
     }
-    else if (commState == OPENING) {
-        printf("symbol '/' no valid\n");
+    if (parenth > 0) {
+        printf("Error: There are %d "
+               "parenthesis open but no closed\n",
+               parenth);
+    }
+    else if (parenth < 0) {
+        printf("Error: There are %d "
+               "parenthesis closed but no opened\n",
+               -parenth);
     }
 
-    if (quoteState == TRUE) {
-        printf("quote %c no closed\n", quoteType);
+    if (bracket > 0) {
+        printf("Error: There are %d "
+               "brackets open but no closed\n",
+               bracket);
     }
-
-    if (escSeqState == TRUE) {
-        printf("quote %c no closed\n", quoteType);
-    }
-
-    if (parent > 0) {
-        printf("Parentheses error: %d pending to close\n", parent);
-    }
-    else if (parent < 0) {
-        printf("Parentheses error: %d closed but no open\n", -parent);
+    else if (bracket < 0) {
+        printf("Error: There are %d "
+               "brackets closed but no opened\n",
+               -bracket);
     }
 
     if (brace > 0) {
-        printf("Error brace: %d pending to close\n", brace);
+        printf("Error: There are %d "
+               "braces open but no closed\n",
+               brace);
     }
     else if (brace < 0) {
-        printf("Error brace: %d closed but no open\n", -brace);
-    }
-
-    if (square > 0) {
-        printf("Error square: %d pending to close\n", square);
-    }
-    else if (square < 0) {
-        printf("Error square: %d closed but no open\n", -square);
-    }
-
-    if (angled > 0) {
-        printf("Error angled: %d pending to close\n", angled);
-    }
-    else if (square < 0) {
-        printf("Error angled: %d closed but no open\n", -angled);
-    }
-    return 0;
-}
-
-/**
- * @brief Print pending char after get EOF.
- * Example: when input = '/' + EOF.
- * when read '/' it needs wait for next char to know if print it.
- * next char is EOF so read is over, so '/' will not be printed.
- * This function fix that.
- * 
- */
-void printPendingAfterEOF(void)
-{
-    if (commState == OPENING) {
-        putchar('/');
-    }
-    else if (commState == CLOSING) {
-        putchar('*');
+        printf("Error: There are %d "
+               "braces closed but no opened\n",
+               -brace);
     }
 }
-
-/**
- * @brief Check if the actual char is inside a comment or not
- * 
- * @return char Return '\0' if char is inside a comment. else return c value
- */
-char controlComments(c)
+void controlPosition(int c)
 {
-    /* check first char to close comment */
-    if (commState == TRUE) {
-        if (c == '*') {
-            commState = CLOSING;
-        }
+    if (c == '\n' && quote == CLOSED) {
+        ++line;
+        column = 0;
     }
-    /* check second char to close comment */
-    else if (commState == CLOSING) {
-        if (c == '/') {
-            commState = FALSE;
-        }
+    else if (c == '\t') {
+        column = column + TABSIZE;
     }
-    /* check second char to init comment */
-    else if (commState == OPENING) {
-        if (c == '*') {
-            commState = TRUE;
-        }
-    }
-    /* check fist char to init comment */
     else {
-        if (c == '/' && quoteState == FALSE && escSeqState == FALSE) {
-            commState = OPENING;
+        ++column;
+    }
+}
+int codeControl(int c)
+{
+    if (c == '/') {
+        comment = OPENING;
+    }
+    else if (c == '\'' || c == '\"') {
+        quote = OPEN;
+        actquote = c;
+    }
+
+    else if (c == '(') {
+        ++parenth;
+    }
+    else if (c == ')') {
+        --parenth;
+        if (parenth < 0) {
+            printf("%s", errorHeader);
+            printf("Error: parentheses closed before open in line %d; column: %d\n",
+                   line, column);
+            return 0;
+        }
+    }
+    else if (c == '[') {
+        ++bracket;
+    }
+    else if (c == ']') {
+        --bracket;
+        if (bracket < 0) {
+            printf("%s", errorHeader);
+            printf("Error: bracket closed before open in line %d; column: %d\n",
+                   line, column);
+            return 0;
+        }
+    }
+    else if (c == '{') {
+        ++brace;
+    }
+    else if (c == '}') {
+        --brace;
+        if (brace < 0) {
+            printf("%s", errorHeader);
+            printf("Error: brace closed before open in line %d; column: %d\n",
+                   line, column);
+            return 0;
+        }
+    }
+    else if (c == '\\') {
+        // UNKNOWN TOKEN
+        printf("%s", errorHeader);
+        printf("Error: unrecognized token (\'%c\') in line %d; column: %d\n",
+               c, line, column);
+        return 0;
+    }
+    return 1;
+}
+
+int quotesControl(int c)
+{
+    if (escseq == CLOSED) {
+        if (c == actquote) {
+            quote = CLOSED;
+            actquote = '\0';
+        }
+        else if (c == '\\') {
+            escseq = OPEN;
+        }
+        else if (c == '\n') {
+            printf("%s", errorHeader);
+            printf("Error: quote (%c) no closed before end-of-line in line %d; column: %d\n",
+                   actquote, line, column);
+            return 0;
         }
         else {
-            // control exceptions (quotes, sequences, etc)
-            controlQuotes(c);
-            controlEscapeSequences(c);
-            return c;
-        }
-    }
-    return '\0';
-}
-
-/**
- * @brief Control if a escape sequence is init
- * 
- */
-void controlEscapeSequences(c)
-{
-    if (c == '\\')
-        escSeqState = TRUE;
-    else
-        escSeqState = FALSE;
-}
-
-/**
- * @brief Control if a quoute, simple or double, is init
- * 
- */
-void controlQuotes(c)
-{
-    if (quoteState == TRUE) {
-        if (c == quoteType) {
-            quoteType = '\0';
-            quoteState = FALSE;
+            escseq == CLOSED;
         }
     }
     else {
-        if (c == '"' || c == '\'') {
-            if (escSeqState) {
-                escSeqState = FALSE;
-            }
-            else {
-                quoteType = c;
-                quoteState = TRUE;
-            }
+        escseq = CLOSED;
+    }
+    return 1;
+}
+
+int commentControl(int c)
+{
+    if (comment == OPENING) {
+        if (c == '*') {
+            comment = OPEN;
+        }
+        else {
+            comment == CLOSED;
         }
     }
+    else if (comment == OPEN) {
+        if (c == '*') {
+            comment = CLOSING;
+        }
+    }
+    else if (comment == CLOSING) {
+        if (c == '/') {
+            comment = CLOSED;
+        }
+        else {
+            comment = OPEN;
+        }
+    }
+    return 1;
 }

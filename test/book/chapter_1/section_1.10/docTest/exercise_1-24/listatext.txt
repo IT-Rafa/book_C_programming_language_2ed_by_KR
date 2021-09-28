@@ -1,0 +1,37 @@
+test 1
+no input
+
+test 2
+text with parentheses, brackets and braces in C well formed
+simple and double quotes well formed
+escape sequences inside quotes well formed
+
+test 3
+parentheses, brackets and braces open inside comment
+parentheses, brackets and braces open outside comment and no closed
+with final end-of-line
+
+test 4
+parentheses, brackets and braces closed inside comment
+parentheses, brackets and braces closed outside comment but no open
+without final end-of-line
+
+test 5
+comment
+parentheses, brackets and braces open inside escape sequence (no inside quotes)
+
+test 6
+quote ' open but no closed after end-line in line 2
+
+test 7 capture closed symbol without open
+quote " open but no closed after end-line in lines 2 and 3
+
+test 8 
+parentheses closed and open (inversed order)
+
+test 9 
+parentheses closed and open (inversed order)
+
+test 10 
+parentheses closed and open (inversed order)
+

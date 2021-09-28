@@ -8,7 +8,8 @@
                 "-g",
                 "${file}",
                 "-o",
-                "bin/${fileBasenameNoExtension}"
+                "bin/${fileBasenameNoExtension}",
+                "-lm"
             ],
             "options": {
                 "cwd": "${fileDirname}/.."
@@ -53,9 +54,12 @@
                 "${workspaceFolder}/test/book/chapter_1/section_1.10/src/Section_1.10_Test.c",
                 "${workspaceFolder}/test/book/chapter_2/section_2.02/src/Section_2.02_Test.c",
                 "${workspaceFolder}/test/book/chapter_2/section_2.06/src/Section_2.06_Test.c",
+                "${workspaceFolder}/test/book/chapter_2/section_2.07/src/Section_2.07_Test.c",
 
                 "-o",
                 "${workspaceFolder}/test/bin/AllTest",
+                "-lm"
+
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

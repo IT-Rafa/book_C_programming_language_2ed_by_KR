@@ -8,6 +8,14 @@ Exercise 1-24. Write a program to check a C program for rudimentary syntax error
 ---
 
 ## Answer
+- The quotes no closed in the same line are errors and will stop the read of file, showing the line and column where the error was detected
+
+I supposed that a escape sequence only have sense if it is inside a quotes.
+'\n' or "\n" -> are escape sequence
+/* \n *\     -> is not a escape sequence
+c code outside quotes,
+\n           ->   is not a escape sequence
+
 This solution dont't work very well.
 If there are two fails, a bad opened and a bad closed, the counter of symbols result in 0, so it don't find any problem.
 
@@ -16,7 +24,7 @@ If there are two fails, a bad opened and a bad closed, the counter of symbols re
 () - Parentheses (Paréntesis)
 {} - braces (Llaves)
 
-
+my IDE don´t recognize \ out of quotes
 ### Source
 Source reference: @ref exercise_1-24.c
 @include exercise_1-24.c

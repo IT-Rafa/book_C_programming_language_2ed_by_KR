@@ -1,0 +1,2 @@
+------------- ERRORS FOUND -------------
+Error: unrecognized token ('\') in line 6; column: 1

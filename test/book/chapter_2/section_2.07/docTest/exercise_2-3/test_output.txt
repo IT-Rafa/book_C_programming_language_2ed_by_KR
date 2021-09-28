@@ -1,0 +1,68 @@
+over= ffffffff0
+max ffffffff: 8
+15
+result = 15
+hexadecimal number:   f is the integer: 15
+max ffffffff: 8
+15
+result = 15
+hexadecimal number:   F is the integer: 15
+max ffffffff: 8
+15
+-1
+result = 4294967295
+hexadecimal number: 0xf is the integer: 4294967295
+max ffffffff: 8
+15
+-1
+result = 4294967295
+hexadecimal number: 0Xf is the integer: 4294967295
+max ffffffff: 8
+15
+-1
+result = 4294967295
+hexadecimal number: 0xF is the integer: 4294967295
+max ffffffff: 8
+15
+-1
+result = 4294967295
+hexadecimal number: 0XF is the integer: 4294967295
+max ffffffff: 8
+5
+15
+-1
+result = 4294967285
+hexadecimal number: 0xF5 is the integer: 4294967285
+max ffffffff: 8
+15
+15
+2
+11
+12
+10
+result = 11318015
+hexadecimal number: 1acb2fF is the integer: 11318015
+max ffffffff: 8
+result = 0
+hexadecimal number: j is the integer: 0
+max ffffffff: 8
+15
+15
+15
+15
+15
+15
+15
+result = 268435455
+hexadecimal number: ffffffff is the integer: 268435455
+max ffffffff: 8
+0
+15
+15
+15
+15
+15
+15
+15
+result = 4294967280
+hexadecimal number: ffffffff0 is the integer: 4294967280

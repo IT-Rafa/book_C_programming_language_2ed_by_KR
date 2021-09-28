@@ -88,8 +88,8 @@ void testOnlyMainExercise(CuTest *tc, char *testName, struct dataExercise exer)
     if (testName == NULL) // Test for no input programs
     {
         *inputPath = '\0';
-        sprintf(outputPath, "%s%s", testPath, "output.txt");
-        sprintf(expectedPath, "%s%s", testPath, "expected.txt");
+        sprintf(outputPath, "%s%s", testPath, "test_output.txt");
+        sprintf(expectedPath, "%s%s", testPath, "test_expected.txt");
         runExercise(tc, NULL, outputPath, exer);
     }
     else // Test for several input programs
@@ -178,7 +178,7 @@ int compileExercise(struct dataExercise exer)
 #if defined(_WIN32)
         sprintf(command, "%s %s %s %s", "cl", src, "-Fe", binFile);
 #else
-        sprintf(command, "%s %s %s %s  > /dev/null", "gcc -w", srcPath, "-o", binFile);
+        sprintf(command, "%s %s %s %s %s > /dev/null", "gcc -w", srcPath, "-o", binFile, "-lm");
 #endif
         return system(command) == 0;
     }
@@ -247,26 +247,7 @@ int getInputPath(char *inputPath, struct dataExercise exer)
                    sep);
     ;
 }
-/**
- * @brief Get the output path of a exercise execution and return if it exists. For test.
- * 
- * @param path the string where the path will be stored.
- * @param exer Data of exercise
- * @return int 1 if file exists. 0 if doesn't.
- */
-int getOutputActualPath(char *path, struct dataExercise exer)
-{
-    char sep[] = SEPARATOR;
-    mkExerciseTestFolder(exer);
 
-    return sprintf(path, "%s%s%s%s%s%s%s%s%s%s%s%s%s",
-                   "test", sep, "book",
-                   sep, exer.chapter,
-                   sep, exer.section,
-                   sep, "docTest",
-                   sep, exer.exercise,
-                   sep, "actual.txt");
-}
 /**
  * @brief Get the source path of file with the expected output of exercise execution and return if it exists.
  * 

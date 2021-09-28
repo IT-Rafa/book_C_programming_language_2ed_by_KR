@@ -32,7 +32,6 @@ int compileExercise(struct dataExercise exer);
 int getSourcePath(char *st, struct dataExercise exer);
 int getBinPath(char *st, struct dataExercise exer);
 int getInputPath(char *inputPath, struct dataExercise exer);
-int getOutputActualPath(char *st, struct dataExercise exer);
 int getTestFolder(char *st, struct dataExercise exer);
 int mkExerciseBinFolder(struct dataExercise exer);
 int mkExerciseTestFolder(struct dataExercise exer);

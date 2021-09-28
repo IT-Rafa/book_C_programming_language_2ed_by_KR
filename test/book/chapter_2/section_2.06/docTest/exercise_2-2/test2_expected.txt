@@ -1,1 +1,2 @@
 Testing Exercise 2-2 line 1
+len = 27

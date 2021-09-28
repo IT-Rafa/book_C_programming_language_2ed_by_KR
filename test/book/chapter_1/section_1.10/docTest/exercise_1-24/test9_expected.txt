@@ -1,0 +1,2 @@
+------------- ERRORS FOUND -------------
+Error: bracket closed before open in line 1; column: 1

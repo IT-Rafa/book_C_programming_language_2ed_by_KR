@@ -1,0 +1,9 @@
+/*
+	parentheses, brackets and braces, inside escape sequence
+	escape sequence out of quotes is not sense
+*/
+
+\(
+\[
+\{
+\

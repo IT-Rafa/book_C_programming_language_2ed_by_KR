@@ -13,6 +13,7 @@ CuSuite *Section_1_10();
 
 CuSuite *Section_2_02();
 CuSuite *Section_2_06();
+CuSuite *Section_2_07();
 
 void RunAllTests(void)
 {
@@ -31,6 +32,8 @@ void RunAllTests(void)
 
 	CuSuiteAddSuite(suite, Section_2_02());
 	CuSuiteAddSuite(suite, Section_2_06());
+	CuSuiteAddSuite(suite, Section_2_07());
+
 	CuSuiteRun(suite);
 	CuSuiteSummary(suite, output);
 	CuSuiteDetails(suite, output);

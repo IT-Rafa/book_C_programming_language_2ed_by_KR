@@ -26,7 +26,7 @@ void Exercise_2_01_Test1(CuTest *tc)
 {
     struct dataExercise exer = {"chapter_2", "section_2.02", "exercise_2-1"};
 
-    testOnlyMainExercise(tc, "test1_", exer);
+    testOnlyMainExercise(tc, NULL, exer);
 }
 
 // ADD CUTEST FUNCTION

@@ -1,1 +1,4 @@
-/
+------------- ERRORS FOUND -------------
+Error: There are 2 parenthesis open but no closed
+Error: There are 2 brackets open but no closed
+Error: There are 2 braces open but no closed

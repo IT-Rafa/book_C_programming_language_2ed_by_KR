@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 /* SYMBOLIC CONSTANTS */
-#define LIMIT 1000
+#define LIMIT 30
 
 /* EXTERNAL VARIABLES */
 /* FUNCTIONS DECLARATIONS */
@@ -29,9 +29,11 @@ int getline_book(char s[], int lim);
  */
 int main(void)
 {
+    int len;
     char s[LIMIT];
-    getline_book_v2(s, LIMIT);
+    len = getline_book_v2(s, LIMIT);
     printf("%s", s);
+    printf("\nlen = %d", len);
     return 0;
 }
 
@@ -45,18 +47,24 @@ int getline_book_v2(char s[], int lim)
                 s[i] = c;
                 if (c == '\n') {
                     end = 1;
-                    s[i] = c;
                 }
             }
             else {
                 end = 1;
+                --i;
             }
         }
         else {
             end = 1;
+            --i;
         }
     }
 
     s[i] = '\0';
-    return i;
+
+    if (i >= lim - 1) {
+        return -i;
+    }
+    else
+        return i;
 }
