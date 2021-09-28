@@ -1,0 +1,6 @@
+searching into "abcdefABCDEF123456"
+
+"ab" - 'a' was found in position: 0
+"6" - '6' was found in position: 17
+"321" - '1' was found in position: 12
+"xyz" - No found
