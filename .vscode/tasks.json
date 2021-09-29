@@ -56,6 +56,7 @@
                 "${workspaceFolder}/test/book/chapter_2/section_2.06/src/Section_2.06_Test.c",
                 "${workspaceFolder}/test/book/chapter_2/section_2.07/src/Section_2.07_Test.c",
                 "${workspaceFolder}/test/book/chapter_2/section_2.08/src/Section_2.08_Test.c",
+                "${workspaceFolder}/test/book/chapter_2/section_2.09/src/Section_2.09_Test.c",
 
                 "-o",
                 "${workspaceFolder}/test/bin/AllTest",
