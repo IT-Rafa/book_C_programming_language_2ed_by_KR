@@ -1,0 +1,4 @@
+setbits(255, 7, 4, 120) = 1000 1111 
+setbits(106, 2, 1, 255) = 0110 1110 
+setbits(106, 0, 1, 255) = 0110 1011 
+setbits(106, 0, 2, 255) = Error No exists 2 bits between position 0 and rightmost position - 0000 0000 
