@@ -11,6 +11,7 @@
 #include <stdio.h>
 
 /* SYMBOLIC CONSTANTS */
+#define SIZE 8
 /* EXTERNAL VARIABLES */
 /* FUNCTIONS DECLARATIONS */
 unsigned getbits(unsigned x, int p, int n);
@@ -37,7 +38,7 @@ int main(void)
 
     // Result in base-2
     printf("%u in base-2 is: ", resultB10);
-    showBits(resultB10, 8);
+    showBits(resultB10, SIZE);
     putchar('\n');
     return 0;
 }
@@ -54,9 +55,10 @@ unsigned getbits(unsigned x, int p, int n)
 {
     return (x >> (p + 1 - n)) & ~(~0 << n);
 }
+
+
 /**
- * @brief print to standard output the value in base-2 of n.
- * size is the number of bits to show.
+ * @brief print to standard output the "size" rightmost bits of n
  * 
  * @param n number to show as base-2
  * @param size Number of bits to show.
@@ -65,9 +67,9 @@ void showBits(unsigned n, int size)
 {
     int pos = size;
     for (int i = 0; i < size; i++) {
-
         printf("%u", getbits(n, --pos, 1));
-        if ((i + 1) % 4 == 0)
+
+        if (i != size-1 && (i + 1) % 4 == 0)
             putchar(' ');
     }
 }

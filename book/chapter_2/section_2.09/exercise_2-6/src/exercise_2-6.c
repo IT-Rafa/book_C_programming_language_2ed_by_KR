@@ -12,7 +12,9 @@
 #include <stdio.h>
 
 /* SYMBOLIC CONSTANTS */
+#define SIZE 8
 /* EXTERNAL VARIABLES */
+
 /* FUNCTIONS DECLARATIONS */
 unsigned setbits(unsigned x, int p, int n, int y);
 // only for test
@@ -36,7 +38,7 @@ int main(void)
     // n: ****
     // Result:  x: ---- ****   <--  y: ---- **** = 1000 1111
     printf("setbits(%u, %d, %d, %u) = ", 255, 7, 4, 120);
-    showBits(setbits(255, 7, 4, 120), 8);
+    showBits(setbits(255, 7, 4, 120), SIZE);
     putchar('\n');
 
     // x= 0110 1010; p=2; n=1; y=1111 1111
@@ -44,7 +46,7 @@ int main(void)
     // n: ****
     // Result:  x: ---- -*--   <--  y: ---- ---* = 0110 1110
     printf("setbits(%u, %d, %d, %u) = ", 106, 2, 1, 255);
-    showBits(setbits(106, 2, 1, 255), 8);
+    showBits(setbits(106, 2, 1, 255), SIZE);
     putchar('\n');
 
     // x= 0110 1010; p=0; n=1; y=1111 1111
@@ -52,7 +54,7 @@ int main(void)
     // n: *
     // Result:  x: ---- ---*   <--  y: ---- ---* = 0110 1011
     printf("setbits(%u, %d, %d, %u) = ", 106, 0, 1, 255);
-    showBits(setbits(106, 0, 1, 255), 8);
+    showBits(setbits(106, 0, 1, 255), SIZE);
     putchar('\n');
 
     // x= 0110 1010; p=0; n=1; y=1111 1111
@@ -60,7 +62,7 @@ int main(void)
     // n: *
     // Result:  x: ---- ---*?   <--  y: ---- ---*? = ??
     printf("setbits(%u, %d, %d, %u) = ", 106, 0, 2, 255);
-    showBits(setbits(106, 0, 2, 255), 8);
+    showBits(setbits(106, 0, 2, 255), SIZE);
     putchar('\n');
     return 0;
 }
@@ -68,19 +70,21 @@ int main(void)
 /**
  * @brief Replace the n bits in x that begin at p, for the n rightmost bits in y
  * 
- * @param x Number to modify
- * @param p Position to begin modification
- * @param n Count of bits to modify
- * @param y Number with the n bits used to replace (at rightmost place)
+ * @param x The number to modify
+ * @param p The initial bit position in x to replace
+ * @param n The count of bits to invert
+ * @param y The number with the n rightmost bits to replace with
  * 
- * @return unsigned Number modified; 0 if error
+ * @return unsigned The modified number; 0 if error
  */
 unsigned setbits(unsigned x, int p, int n, int y)
 {
+    // check right values
     if (n > p + 1) {
-        printf("Error No exists %d bits between position %d and rightmost position - ", n, p);
+        printf("Error in setbits() call: No exists %d bits between position %d and rightmost position - ", n, p);
         return 0;
     }
+    int move = p - n + 1;
     unsigned pattern_n;
     unsigned pattern_np;
     unsigned y_last_n;
@@ -90,7 +94,7 @@ unsigned setbits(unsigned x, int p, int n, int y)
     pattern_n = ~(~0 << n);
 
     // move pattern to pos
-    pattern_np = pattern_n << p - n + 1;
+    pattern_np = pattern_n << move;
 
     // switch off the pattern-in-pos bits for x
     x = x & ~pattern_np;
@@ -100,7 +104,7 @@ unsigned setbits(unsigned x, int p, int n, int y)
     y_last_n = y & pattern_n;
 
     // Move the last numbers of y to pos
-    y = y_last_n << p - n + 1;
+    y = y_last_n << move;
 
     // replace bits off in x with bits on in y
     return x | y;
@@ -109,10 +113,11 @@ unsigned setbits(unsigned x, int p, int n, int y)
 /**
  * @brief Get n bits from position p of a number x.
  * 
- * @param x 
- * @param p 
- * @param n 
- * @return unsigned 
+ * @param x The number where the field to get is
+ * @param p The initial bit position to get
+ * @param n The count of bits to get
+ * 
+ * @return unsigned The n-bits field
  */
 unsigned getbits(unsigned x, int p, int n)
 {
@@ -126,6 +131,7 @@ unsigned getbits(unsigned x, int p, int n)
     // (0001 1111) & (0000 0111) --> 111 (capture only the set of bits)
     return (x >> (p + 1 - n)) & ~(~0 << n);
 }
+
 /**
  * @brief print to standard output the "size" rightmost bits of n
  * 
@@ -136,9 +142,9 @@ void showBits(unsigned n, int size)
 {
     int pos = size;
     for (int i = 0; i < size; i++) {
-
         printf("%u", getbits(n, --pos, 1));
-        if ((i + 1) % 4 == 0)
+
+        if (i != size-1 && (i + 1) % 4 == 0)
             putchar(' ');
     }
 }
